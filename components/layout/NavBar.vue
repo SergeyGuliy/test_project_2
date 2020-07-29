@@ -86,7 +86,6 @@
     },
     mounted() {
       // console.warn(this.$route.fullPath)
-      console.error(this.$store.state.app.activeLanguage)
       // this.$store.commit('app/toggleLang', 'ru')
     }
   }

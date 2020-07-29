@@ -35,6 +35,8 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '@/plugins/vuelidate',
+    '@/plugins/apiRequest',
   ],
   /*
   ** Auto import components

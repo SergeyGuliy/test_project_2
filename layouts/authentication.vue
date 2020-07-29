@@ -1,7 +1,9 @@
 <template>
   <div id="authentication">
     <NavBar />
-    <Nuxt />
+    <div class="container">
+      <Nuxt />
+    </div>
   </div>
 </template>
 
@@ -29,5 +31,8 @@
     height: 100vh;
     width: 100vw;
     background: url("https://quwi.com/img/backgrounds/gray_blur.png");
+    .container{
+      height: calc(100vh - 46px);
+    }
   }
 </style>
