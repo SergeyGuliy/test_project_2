@@ -1,32 +1,33 @@
 <template>
   <div
     id="ToolTip"
-    :class="status === 'show' ? 'active' : ''"
-    :style="`color: ${textColor}`"
+    :class="errorStatus ? 'active' : ''"
   >
-    {{ text }}
+    {{ errorMessage }}
   </div>
 </template>
 
 <script>
   export default {
     name: "ToolTip",
-    data() {
-      return {}
+    computed: {
+      errorStatus() {
+        return this.$store.state.app.errorStatus
+      },
+      errorType() {
+        return this.$store.state.app.errorType
+      },
+      errorMessage() {
+        return this.$store.state.app.errorMessage
+      },
     },
-    components: {},
-    props: {
-      text: {
-        type: String,
-        default: 'EMPTY TOOLTIP MESSAGE !!!'
-      },
-      textColor: {
-        type: String,
-        default: 'orange'
-      },
-      status: {
-        type: String,
-        default: 'hide'
+    watch: {
+      errorStatus(val){
+        if (val) {
+          setTimeout(() => {
+            this.$store.commit('app/closeModal')
+          }, 3000)
+        }
       }
     }
   }

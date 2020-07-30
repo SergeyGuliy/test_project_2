@@ -75,14 +75,21 @@
           Логин
         </button>
       </div>
-
     </client-only>
     <div
       v-if="!!$store.state.userData"
       class="buttons"
     >
       <button
+        v-if="$route.path !== '/'"
         class="buttons-auth"
+        @click="$router.back()"
+      >
+        BACK
+      </button>
+      <button
+        class="buttons-auth"
+        @click="$router.push('/')"
       >
         PROJECTS
       </button>

@@ -1,15 +1,21 @@
 <template>
   <div id="Companies">
-    Companies
+    <CompanyCard v-for="(project, index) in projects" :key="index" :project="project" />
   </div>
 </template>
 
 <script>
   export default {
     name: "Companies",
-    data() {
-      return {}
+    props: {
+      projects: {
+        required: true,
+        type: Array
+      }
     },
+    components: {
+      CompanyCard: () => import('../UI/CompanyCard')
+    }
   }
 </script>
 

@@ -1,5 +1,6 @@
 <template>
   <div id="authentication">
+    <ToolTip />
     <NavBar />
     <div class="container">
       <Nuxt />
@@ -13,7 +14,9 @@
     middleware: 'isLoggedIn',
 
     components: {
-      NavBar: () => import("../components/layout/NavBar")
+      NavBar: () => import("../components/layout/NavBar"),
+      ToolTip: () => import("../components/layout/ToolTip"),
+
     }
   }
 </script>

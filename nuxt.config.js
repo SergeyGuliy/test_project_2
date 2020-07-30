@@ -28,6 +28,8 @@ export default {
   /*
   ** Global CSS
   */
+  loading: { color: 'red' },
+
   css: [
   ],
   /*

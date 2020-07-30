@@ -21,13 +21,21 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({commit}, { $cookies }){
+  async nuxtServerInit({commit, dispatch }, { $cookies, redirect }){
     if (!!$cookies.get('token')) {
       try {
         let res = await apiRequest.get('auth/init', $cookies.get('token'))
         commit('setUserData', res.data)
       } catch (e) {
-        console.log(e)
+        // Log out user if auth error
+        if (e.response.status === 401) {
+          dispatch('logOut')
+          redirect('/login')
+        }
+        else {
+          // Other variable errors, 404 ....
+        }
+
       }
     }
 
@@ -42,10 +50,14 @@ export const actions = {
     try {
       let res = await apiRequest.logOut('auth/logout')
       if (res.status === 200) {
-        this.$cookies.removeAll()
         commit('cleanUserData')
+        this.$cookies.removeAll()
+        commit('app/setError', {
+          message: 'Вы вышли из ситемы'
+        })
       }
     } catch (e) {
+      // Some additional logic to log out
       console.dir(e)
     }
 

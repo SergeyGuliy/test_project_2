@@ -17,13 +17,12 @@ export default {
     })
   },
   get(path, cookies) {
-    let cook = process.server ? cookies : Vue.$cookies.get('token')
     try {
       return axios({
         method: 'get',
         url: `https://api.quwi.com/v2/${path}`,
         headers: {
-          'Authorization': `Bearer ${cook}`
+          'Authorization': `Bearer ${cookies}`
         }
       })
     } catch (e) {
@@ -31,21 +30,18 @@ export default {
     }
   },
 
-  post(path, data) {
-    console.log(Vue.$cookies.get('token'))
-    console.log(`https://api.quwi.com/v2/${path}`)
+  put(path, data, cookies) {
     try {
       return axios({
-        method: 'post',
+        method: 'put',
         url: `https://api.quwi.com/v2/${path}`,
         data: data,
         headers: {
-          'Authorization': `Bearer ${Vue.$cookies.get('token')}`
+          'Authorization': `Bearer ${cookies}`
         }
       })
     } catch (e) {
       console.log(e)
-      return true
     }
   }
 }

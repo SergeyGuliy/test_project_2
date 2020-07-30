@@ -1,6 +1,5 @@
 <template>
   <div id="login">
-    <ToolTip :status="toolTipStatus" :text="toolTipMessage"/>
     <form class="auth-box">
       <div class="auth-box-header">LOGIN</div>
       <div class="input">
@@ -48,6 +47,7 @@
   } from "vuelidate/lib/validators";
 
   import apiRequest from "../plugins/apiRequest";
+
   export default {
     name: "login",
     layout: 'authentication',
@@ -55,14 +55,10 @@
       return {
         email: 'vitaliibondtest@gmail.com',
         password: 'vitaliibondtest',
-        toolTipStatus: 'hide',
-        toolTipMessage: 'asdsadsda',
         loading: false,
       }
     },
-
     components: {
-      ToolTip: () => import("../components/layout/ToolTip"),
       Spiner: () => import("../components/UI/Spiner")
     },
     computed: {
@@ -108,6 +104,10 @@
             this.$cookies.set('token', res.data.token)
             this.$store.commit('setUserData', res.data.app_init)
             this.$router.push('/')
+
+            this.$store.commit('app/setError', {
+              message: 'Вы вошли в ситему'
+            })
           } else {
             // I dont know can income other data with status 200
             // If can code will be here
@@ -115,22 +115,23 @@
         } catch (e) {
           if (e.response.status === 417) {
             // Get error from response
-            this.toolTipMessage = Object.values(Object.values(e.response.data)[0])[0]
-            this.toolTipStatus = 'show'
-            setTimeout(() => {
-              this.toolTipStatus = 'hide'
-            }, 3000)
+            this.$store.commit('app/setError', {
+              message: Object.values(Object.values(e.response.data)[0])[0]
+            })
+          } else if (e.response.status === 404) {
+            // Show error page with error data
+            this.$store.commit('app/setError', {
+              message: e.response.data.message
+            })
           } else {
-            console.error(e)
+            // Possible unknown error
+            this.$store.commit('app/setError', {
+              message: 'Unknown Error'
+            })
           }
         }
         this.loading = false
-        // try {
-        //   let res = await apiRequest.get('companies')
-        //   console.warn(res)
-        // } catch (e) {
-        //   console.dir(e)
-        // }
+
       }
     }
   }
