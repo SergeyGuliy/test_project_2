@@ -1,5 +1,6 @@
 <template>
   <div id="login">
+    <ToolTip :status="toolTipStatus" :text="toolTipMessage"/>
     <form class="auth-box">
       <div class="auth-box-header">LOGIN</div>
       <div class="input">
@@ -23,13 +24,15 @@
         <div class="input-error" v-if="!$v.password.required">Обязательно к заполнению.</div>
         <div class="input-error" v-else-if="!$v.password.minLength">Пародь должен иметь 8 знаков и более.</div>
         <div class="input-error" v-else-if="!$v.password.maxLength">Пароль не может быть длинее 12 знаков.</div>
-        <div class="input-error" v-else-if="!$v.password.numbersAndLetters">Пароль должен содержать латинсикие буквы и цифры.</div>
+<!--        <div class="input-error" v-else-if="!$v.password.numbersAndLetters">Пароль должен содержать латинсикие буквы и цифры.</div>-->
         <div v-else style="height: 12px"></div>
       </div>
       <button
         @click.prevent="logIn"
+        :disabled="this.$v.email.$invalid || this.$v.password.$invalid"
       >
-        LOGIN
+        <span v-if="!loading">LOGIN</span>
+        <Spiner v-else/>
       </button>
     </form>
   </div>
@@ -47,19 +50,21 @@
   import apiRequest from "../plugins/apiRequest";
   export default {
     name: "login",
+    layout: 'authentication',
     data() {
       return {
-        email: 'qweew@gmail.com',
-        password: 'ewqeqw2334'
+        email: 'vitaliibondtest@gmail.com',
+        password: 'vitaliibondtest',
+        toolTipStatus: 'hide',
+        toolTipMessage: 'asdsadsda',
+        loading: false,
       }
     },
-    async asyncData({ app, store, error }) {
 
+    components: {
+      ToolTip: () => import("../components/layout/ToolTip"),
+      Spiner: () => import("../components/UI/Spiner")
     },
-
-    layout: 'authentication',
-
-
     computed: {
       getEmailStyle() {
         if (this.email) {
@@ -80,15 +85,52 @@
       email: { email, required },
       password: {
         minLength: minLength(8),
-        maxLength: maxLength(12),
+        maxLength: maxLength(16),
         required,
-        numbersAndLetters: helpers.regex('alpha', /^(?=.*\d)(?=.*[a-zA-Z]).{1,20}$/)
+        // numbersAndLetters: helpers.regex('alpha', /^(?=.*\d)(?=.*[a-zA-Z]).{1,20}$/)
       }
     },
 
     methods: {
       async logIn(){
+        if ((this.$v.email.$invalid || this.$v.password.$invalid)) return
+        if (this.loading) return
 
+        this.loading = true
+        try {
+          // Request to get auth token
+          let res = await apiRequest.auth('auth/login', {
+            email: this.email,
+            password: this.password
+          })
+          // If status 200 sets data to store and set up token to cookies
+          if (res.status === 200){
+            this.$cookies.set('token', res.data.token)
+            this.$store.commit('setUserData', res.data.app_init)
+            this.$router.push('/')
+          } else {
+            // I dont know can income other data with status 200
+            // If can code will be here
+          }
+        } catch (e) {
+          if (e.response.status === 417) {
+            // Get error from response
+            this.toolTipMessage = Object.values(Object.values(e.response.data)[0])[0]
+            this.toolTipStatus = 'show'
+            setTimeout(() => {
+              this.toolTipStatus = 'hide'
+            }, 3000)
+          } else {
+            console.error(e)
+          }
+        }
+        this.loading = false
+        // try {
+        //   let res = await apiRequest.get('companies')
+        //   console.warn(res)
+        // } catch (e) {
+        //   console.dir(e)
+        // }
       }
     }
   }
@@ -149,6 +191,10 @@
         outline: none;
         border: 1px solid #395378;
         border-radius: 7px;
+        position: relative;
+      }
+      button:disabled{
+        background-color: #636363;
       }
       .invalid{
         border: 2px solid red !important;

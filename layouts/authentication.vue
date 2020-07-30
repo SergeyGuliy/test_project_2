@@ -10,18 +10,10 @@
 <script>
   export default {
     name: "authentication",
-    data() {
-      return {}
-    },
+    middleware: 'isLoggedIn',
+
     components: {
       NavBar: () => import("../components/layout/NavBar")
-    },
-    mounted() {
-      if (!localStorage.getItem('lang')){
-        this.$store.commit('app/toggleLang', 'ru')
-      } else {
-        this.$store.commit('app/toggleLang', localStorage.getItem('lang'))
-      }
     }
   }
 </script>

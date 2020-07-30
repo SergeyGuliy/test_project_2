@@ -37,6 +37,8 @@ export default {
   plugins: [
     '@/plugins/vuelidate',
     '@/plugins/apiRequest',
+    // '@/plugins/vue-cookies',
+
   ],
   /*
   ** Auto import components
@@ -55,7 +57,14 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/proxy',
+    'cookie-universal-nuxt',
+
+
   ],
+  proxy: {
+    '/v2': 'https://quwi.com/',
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

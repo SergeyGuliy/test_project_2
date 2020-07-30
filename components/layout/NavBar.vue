@@ -1,52 +1,18 @@
 <template>
   <nav id="NavBar">
-    <div class="logo">
+    <div class="logo" @click="!!$store.state.userData? $router.push('/') : ''">
       <img src="https://quwi.com/img/quwi-logo.png" alt="logo" class="">
       <div class="hover" />
     </div>
-    <div
-      class="buttons"
-    >
-      <button
-        class="buttons-lang"
-        @click="toggleLang = !toggleLang"
-        v-if="$store.state.app.activeLanguage === 'ru'"
+    <client-only>
+      <div
+        class="buttons"
+        v-if="!$store.state.userData"
       >
-        <img
-          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgwIiB3aWR0aD0iNjQwIiBpZD0iZmxhZy1pY29uLWNzcy1ydSI+CiAgPGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2Utd2lkdGg9IjFwdCI+CiAgICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwaDY0MHY0ODBIMHoiLz4KICAgIDxwYXRoIGZpbGw9IiMwMDM5YTYiIGQ9Ik0wIDE2MC4wMDNoNjQwVjQ4MEgweiIvPgogICAgPHBhdGggZmlsbD0iI2Q1MmIxZSIgZD0iTTAgMzE5Ljk5N2g2NDBWNDgwSDB6Ii8+CiAgPC9nPgo8L3N2Zz4K"
-          alt=""
-          class="lang"
-        >
-        Русский
         <button
-          class="buttons-lang collapsed"
-          :class="toggleLang? 'collapsed-active' : ''"
-          @click="$store.commit('app/toggleLang', 'en')"
-        >
-          <img
-            src="https://quwi.com/_nuxt/img/us.da1c4f8.svg"
-            alt=""
-            class="lang"
-          >
-          English
-        </button>
-      </button>
-
-      <button
-        class="buttons-lang"
-        @click="toggleLang = !toggleLang"
-        v-if="$store.state.app.activeLanguage === 'en'"
-      >
-        <img
-          src="https://quwi.com/_nuxt/img/us.da1c4f8.svg"
-          alt=""
-          class="lang"
-        >
-        English
-        <button
-          class="buttons-lang collapsed"
-          :class="toggleLang? 'collapsed-active' : ''"
-          @click="$store.commit('app/toggleLang', 'ru')"
+          class="buttons-lang"
+          @click="toggleLang = !toggleLang"
+          v-if="$store.state.app.activeLanguage === 'ru'"
         >
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgwIiB3aWR0aD0iNjQwIiBpZD0iZmxhZy1pY29uLWNzcy1ydSI+CiAgPGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2Utd2lkdGg9IjFwdCI+CiAgICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwaDY0MHY0ODBIMHoiLz4KICAgIDxwYXRoIGZpbGw9IiMwMDM5YTYiIGQ9Ik0wIDE2MC4wMDNoNjQwVjQ4MEgweiIvPgogICAgPHBhdGggZmlsbD0iI2Q1MmIxZSIgZD0iTTAgMzE5Ljk5N2g2NDBWNDgwSDB6Ii8+CiAgPC9nPgo8L3N2Zz4K"
@@ -54,23 +20,77 @@
             class="lang"
           >
           Русский
+          <button
+            class="buttons-lang collapsed"
+            :class="toggleLang? 'collapsed-active' : ''"
+            @click="$store.commit('app/toggleLang', 'en')"
+          >
+            <img
+              src="https://quwi.com/_nuxt/img/us.da1c4f8.svg"
+              alt=""
+              class="lang"
+            >
+            English
+          </button>
         </button>
-      </button>
+
+        <button
+          class="buttons-lang"
+          @click="toggleLang = !toggleLang"
+          v-if="$store.state.app.activeLanguage === 'en'"
+        >
+          <img
+            src="https://quwi.com/_nuxt/img/us.da1c4f8.svg"
+            alt=""
+            class="lang"
+          >
+          English
+          <button
+            class="buttons-lang collapsed"
+            :class="toggleLang? 'collapsed-active' : ''"
+            @click="$store.commit('app/toggleLang', 'ru')"
+          >
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgwIiB3aWR0aD0iNjQwIiBpZD0iZmxhZy1pY29uLWNzcy1ydSI+CiAgPGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2Utd2lkdGg9IjFwdCI+CiAgICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMCAwaDY0MHY0ODBIMHoiLz4KICAgIDxwYXRoIGZpbGw9IiMwMDM5YTYiIGQ9Ik0wIDE2MC4wMDNoNjQwVjQ4MEgweiIvPgogICAgPHBhdGggZmlsbD0iI2Q1MmIxZSIgZD0iTTAgMzE5Ljk5N2g2NDBWNDgwSDB6Ii8+CiAgPC9nPgo8L3N2Zz4K"
+              alt=""
+              class="lang"
+            >
+            Русский
+          </button>
+        </button>
 
 
+        <button
+          class="buttons-auth"
+          v-if="$route.fullPath === '/login'"
+          @click="$router.push('/signup')"
+        >
+          Регистрация
+        </button>
+        <button
+          class="buttons-auth"
+          v-if="$route.fullPath === '/signup'"
+          @click="$router.push('/login')"
+        >
+          Логин
+        </button>
+      </div>
+
+    </client-only>
+    <div
+      v-if="!!$store.state.userData"
+      class="buttons"
+    >
       <button
         class="buttons-auth"
-        v-if="$route.fullPath === '/login'"
-        @click="$router.push('/signup')"
       >
-        Регистрация
+        PROJECTS
       </button>
       <button
         class="buttons-auth"
-        v-if="$route.fullPath === '/signup'"
-        @click="$router.push('/login')"
+        @click="logOut"
       >
-        Логин
+        LOGOUT
       </button>
     </div>
   </nav>
@@ -84,9 +104,11 @@
         toggleLang: false
       }
     },
-    mounted() {
-      // console.warn(this.$route.fullPath)
-      // this.$store.commit('app/toggleLang', 'ru')
+    methods: {
+      async logOut() {
+        await this.$store.dispatch('logOut')
+        this.$router.push('/login')
+      }
     }
   }
 </script>
@@ -97,6 +119,7 @@
     height: 46px;
     background-color: #fafafa;
     padding: 0 20px;
+    border-bottom: 1px solid black;
     display: flex;
     justify-content: space-between;
     .logo{
